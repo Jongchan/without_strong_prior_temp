@@ -93,8 +93,6 @@ class Seq2SeqCond(nn.Module):
 		idx = idx.view( word.size(0), 1, 1 ).expand( word.size(0), 1, self.hidden_size )
 		out = out.gather(1, idx).view( word.size(0), self.hidden_size )
 
-		print (self.decoder_linear.weight)
-
 		return self.decoder_linear(out)
 
 def add_x_y_cor(in_tensor):
@@ -198,15 +196,6 @@ if __name__ == "__main__":
 	with ClevrDataLoader(**train_loader_kwargs) as train_loader:
 		loss_fn = nn.CrossEntropyLoss().cuda()
 		net_optimizer = optim.Adam(net.parameters(), lr=lr, weight_decay=wd)
-		"""
-		net_optimizer = optim.Adam(
-						[ {"params": net.stem.parameters(), "lr": lr*10},
-						{"params": net.RB1.parameters()},
-						{"params": net.RB2.parameters()},
-						{"params": net.RB3.parameters()},
-						{"params": net.classifier.parameters()}]
-						, lr=lr, weight_decay=wd)
-		"""
 		pg_optimizer = optim.Adam(pg.parameters(), lr=lr, weight_decay=wd)
 
 		train_iter = 0
